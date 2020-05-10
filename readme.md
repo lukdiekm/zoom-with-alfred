@@ -8,12 +8,12 @@ Add a meeting to your bookmarks. Enter `zma <id>` first. Alfred will ask you for
 
 ![zma](zma.gif)
 
-### `zmd`
-Delete a bookmark. Alfred will suggest the meetings you can delete.
+### `zm`
+Join a zoom-meeting. Either enter the id directly or choose one of the suggested bookmarks.
 
 ![zm](zm.gif)
 
-### `zm`
-Join a zoom-meeting. Either enter the id directly or choose one of the suggested bookmarks.
+### `zmd`
+Delete a bookmark. Alfred will suggest the meetings you can delete.
 
 ![zmd](zmd.gif)
