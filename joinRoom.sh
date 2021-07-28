@@ -1,0 +1,1 @@
+open "zoommtg://zoom.us/$1"

@@ -201,27 +201,6 @@
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>lastpathcomponent</key>
-				<false/>
-				<key>onlyshowifquerypopulated</key>
-				<false/>
-				<key>removeextension</key>
-				<false/>
-				<key>text</key>
-				<string>Join the meeting using 'zm'</string>
-				<key>title</key>
-				<string>{var:meetingname} added!</string>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.output.notification</string>
-			<key>uid</key>
-			<string>C53FD9D9-5EB4-40DD-AD96-3C182054CBDC</string>
-			<key>version</key>
-			<integer>1</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
 				<key>argumenttype</key>
 				<integer>0</integer>
 				<key>subtext</key>
@@ -244,50 +223,64 @@
 				<key>concurrently</key>
 				<false/>
 				<key>escaping</key>
-				<integer>100</integer>
+				<integer>102</integer>
 				<key>script</key>
-				<string>&lt;?php
-
-function str_between($string, $start, $end)
-{
-    $string = ' ' . $string;
-    $ini = strpos($string, $start);
-    if ($ini == 0) return '';
-    $ini += strlen($start);
-    $len = strpos($string, $end, $ini) - $ini;
-    return substr($string, $ini, $len);
-}
-
-$storage = 'rooms.db';
-
-if (!file_exists($storage)) {
-    file_put_contents($storage, '[]');
-}
-
-$data = unserialize(file_get_contents($storage));
-
-$tmp = array();
-if (getenv('meetingurl') != null) {
-    $tmp['meetingid'] = str_between(getenv('meetingid'), 'zoom.us/j/', '?pwd=');
-    $tmp['meetingpwd'] = explode('?pwd=', getenv('meetingid'))[1];
-} else {
-    $tmp['meetingid'] = preg_replace('/[^a-zA-Z0-9]+/', '', getenv('meetingid'));
-    $tmp['meetingpwd'] = getenv('meetingpwd');
-}
-$data[getenv('meetingname')] = $tmp;
-
-file_put_contents($storage, serialize($data));</string>
+				<string>./saveRoom.sh $meetingname</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
 				<string>newRoom.php</string>
 				<key>type</key>
-				<integer>1</integer>
+				<integer>0</integer>
 			</dict>
 			<key>type</key>
 			<string>alfred.workflow.action.script</string>
 			<key>uid</key>
 			<string>CD433B30-6398-4FEF-BF6F-4BD453E874DE</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>lastpathcomponent</key>
+				<false/>
+				<key>onlyshowifquerypopulated</key>
+				<false/>
+				<key>removeextension</key>
+				<false/>
+				<key>text</key>
+				<string>Join the meeting using 'zm'</string>
+				<key>title</key>
+				<string>{var:meetingname} added!</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.notification</string>
+			<key>uid</key>
+			<string>C53FD9D9-5EB4-40DD-AD96-3C182054CBDC</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>100</integer>
+				<key>script</key>
+				<string>./isUrl.sh $meetingid</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>EC9F8EE0-337C-453A-8741-9B349CC4DE61</string>
 			<key>version</key>
 			<integer>2</integer>
 		</dict>
@@ -315,28 +308,22 @@ file_put_contents($storage, serialize($data));</string>
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>concurrently</key>
-				<false/>
-				<key>escaping</key>
-				<integer>100</integer>
-				<key>script</key>
-				<string>&lt;?php
-echo preg_match("/^((https?)\:\/\/)/", getenv('meetingid'));
-
-?&gt;</string>
-				<key>scriptargtype</key>
-				<integer>1</integer>
-				<key>scriptfile</key>
+				<key>argument</key>
 				<string></string>
-				<key>type</key>
-				<integer>1</integer>
+				<key>passthroughargument</key>
+				<false/>
+				<key>variables</key>
+				<dict>
+					<key>meetingurl</key>
+					<string>{meetingid}</string>
+				</dict>
 			</dict>
 			<key>type</key>
-			<string>alfred.workflow.action.script</string>
+			<string>alfred.workflow.utility.argument</string>
 			<key>uid</key>
-			<string>EC9F8EE0-337C-453A-8741-9B349CC4DE61</string>
+			<string>FF2C4C64-2C84-4FAF-A09B-523FC4E386A7</string>
 			<key>version</key>
-			<integer>2</integer>
+			<integer>1</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -361,31 +348,11 @@ echo preg_match("/^((https?)\:\/\/)/", getenv('meetingid'));
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>argument</key>
-				<string></string>
-				<key>passthroughargument</key>
-				<false/>
-				<key>variables</key>
-				<dict>
-					<key>meetingurl</key>
-					<string>{query}</string>
-				</dict>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.utility.argument</string>
-			<key>uid</key>
-			<string>FF2C4C64-2C84-4FAF-A09B-523FC4E386A7</string>
-			<key>version</key>
-			<integer>1</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
 				<key>conditions</key>
 				<array>
 					<dict>
 						<key>inputstring</key>
-						<string></string>
+						<string>{query}</string>
 						<key>matchcasesensitive</key>
 						<false/>
 						<key>matchmode</key>
@@ -470,31 +437,8 @@ echo preg_match("/^((https?)\:\/\/)/", getenv('meetingid'));
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>concurrently</key>
-				<false/>
-				<key>escaping</key>
-				<integer>102</integer>
-				<key>script</key>
-				<string>open "zoommtg://zoom.us/{query}"</string>
-				<key>scriptargtype</key>
-				<integer>0</integer>
-				<key>scriptfile</key>
-				<string></string>
-				<key>type</key>
-				<integer>0</integer>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.action.script</string>
-			<key>uid</key>
-			<string>49ABF36A-ABD7-43E6-A279-1BB62E141D4D</string>
-			<key>version</key>
-			<integer>2</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
 				<key>alfredfiltersresults</key>
-				<false/>
+				<true/>
 				<key>alfredfiltersresultsmatchmode</key>
 				<integer>0</integer>
 				<key>argumenttreatemptyqueryasnil</key>
@@ -518,40 +462,7 @@ echo preg_match("/^((https?)\:\/\/)/", getenv('meetingid'));
 				<key>runningsubtext</key>
 				<string></string>
 				<key>script</key>
-				<string>&lt;?php
-$storage = 'rooms.db';
-echo '&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;items&gt;';
-
-if(file_exists($storage)) {
-    $data = unserialize(file_get_contents($storage));
-
-    foreach ($data as $meetingname =&gt; $meeting) {
-        if ((strpos($meetingname, $argv[1]) !== false) || $argv[1] == '') {
-            echo '&lt;item uid="'.$meetingname.'" valid="YES" autocomplete="' . $meeting['meetingid'] . '"&gt;';
-            echo '&lt;title&gt;' . $meetingname . '&lt;/title&gt;';
-            echo '&lt;subtitle&gt;' . $meeting['meetingid'] . '&lt;/subtitle&gt;';
-            echo '&lt;icon&gt;/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/Everyone.icns&lt;/icon&gt;';
-            echo '&lt;arg&gt;join?action=join&amp;amp;confno=' . $meeting['meetingid'] . '&amp;amp;pwd=' . $meeting['meetingpwd'] . '&lt;/arg&gt;';
-            echo '&lt;/item&gt;';
-        }
-    }
-}
-
-echo '&lt;item uid="y" valid="YES"&gt;';
-echo '&lt;title&gt;Start new meeting&lt;/title&gt;';
-echo '&lt;icon&gt;/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/Actions.icns&lt;/icon&gt;';
-echo '&lt;arg&gt;start&lt;/arg&gt;';
-echo '&lt;/item&gt;';
-
-echo '&lt;item uid="z" valid="YES"&gt;';
-echo '&lt;title&gt;Enter ID&lt;/title&gt;';
-echo '&lt;subtitle&gt;Directly enter an ID&lt;/subtitle&gt;';
-echo '&lt;icon&gt;/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/MagnifyingGlassIcon.icns&lt;/icon&gt;';
-echo '&lt;arg&gt;join?action=join&amp;amp;confno=' . $argv[1] . '&lt;/arg&gt;';
-echo '&lt;/item&gt;';
-
-echo '&lt;/items&gt;';
-</string>
+				<string>./listRooms.sh $1</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -561,7 +472,7 @@ echo '&lt;/items&gt;';
 				<key>title</key>
 				<string>Zoom</string>
 				<key>type</key>
-				<integer>1</integer>
+				<integer>0</integer>
 				<key>withspace</key>
 				<true/>
 			</dict>
@@ -571,6 +482,52 @@ echo '&lt;/items&gt;';
 			<string>D181E4E5-E0D0-4878-9CD6-C06F15DD70A1</string>
 			<key>version</key>
 			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>script</key>
+				<string>./joinRoom.sh $1</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>49ABF36A-ABD7-43E6-A279-1BB62E141D4D</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>script</key>
+				<string>./deleteRoom.sh $1</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>650F9583-9E2B-45AF-8F88-88F1785581C0</string>
+			<key>version</key>
+			<integer>2</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -621,26 +578,7 @@ echo '&lt;/items&gt;';
 				<key>runningsubtext</key>
 				<string></string>
 				<key>script</key>
-				<string>&lt;?php
-$storage = 'rooms.db';
-if(file_exists($storage)) {
-    echo '&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;items&gt;';
-
-    $data = unserialize(file_get_contents($storage));
-
-    foreach ($data as $meetingname =&gt; $meeting) {
-        if ((strpos($meetingname, $argv[1]) !== false) || $argv[1] == '') {
-            echo '&lt;item uid="'.$meetingname.'" valid="YES" autocomplete="' . $meeting['meetingid'] . '"&gt;';
-            echo '&lt;title&gt;' . $meetingname . '&lt;/title&gt;';
-            echo '&lt;subtitle&gt;' . $meeting['meetingid'] . '&lt;/subtitle&gt;';
-            echo '&lt;icon&gt;/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/ToolbarDeleteIcon.icns&lt;/icon&gt;';
-            echo '&lt;arg&gt;' . $meetingname . '&lt;/arg&gt;';
-            echo '&lt;/item&gt;';
-        }
-    }
-
-    echo '&lt;/items&gt;';
-}</string>
+				<string>./listDeletableRooms.sh</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -650,7 +588,7 @@ if(file_exists($storage)) {
 				<key>title</key>
 				<string>Delete Zoom Bookmark</string>
 				<key>type</key>
-				<integer>1</integer>
+				<integer>0</integer>
 				<key>withspace</key>
 				<true/>
 			</dict>
@@ -660,37 +598,6 @@ if(file_exists($storage)) {
 			<string>A00024C0-948F-481B-B6FF-9B7D22FF878D</string>
 			<key>version</key>
 			<integer>3</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>concurrently</key>
-				<false/>
-				<key>escaping</key>
-				<integer>102</integer>
-				<key>script</key>
-				<string>&lt;?php 
-$storage = 'rooms.db';
-
-if(file_exists($storage)) {
-    $data = unserialize(file_get_contents($storage));
-    unset($data[$argv[1]]);
-    echo $argv[1];
-    file_put_contents($storage, serialize($data));
-}</string>
-				<key>scriptargtype</key>
-				<integer>1</integer>
-				<key>scriptfile</key>
-				<string></string>
-				<key>type</key>
-				<integer>1</integer>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.action.script</string>
-			<key>uid</key>
-			<string>650F9583-9E2B-45AF-8F88-88F1785581C0</string>
-			<key>version</key>
-			<integer>2</integer>
 		</dict>
 	</array>
 	<key>readme</key>
@@ -809,7 +716,7 @@ Join a zoom-meeting. Either enter the id directly or choose one of the suggested
 		<key>EC9F8EE0-337C-453A-8741-9B349CC4DE61</key>
 		<dict>
 			<key>xpos</key>
-			<integer>340</integer>
+			<integer>350</integer>
 			<key>ypos</key>
 			<integer>55</integer>
 		</dict>
